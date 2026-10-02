@@ -1,0 +1,735 @@
+:root {
+  --bg: #000000;
+  --accent: #c5b396;
+  --accent-dim: rgba(197, 179, 150, 0.45);
+  --accent-soft: rgba(197, 179, 150, 0.7);
+  --font: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Mockup 1920: left→gallery 879 (45.8%), gallery 786 (41%), chevron zone 255 (13.3%) */
+  --pad-x: clamp(40px, 9.95vw, 191px);
+  --pad-top: clamp(48px, 6.7vw, 128px);
+  --gutter-x: 8px;
+  --gutter-y: 8px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--accent);
+  font-family: var(--font);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  height: 100%;
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.75;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+/*
+  Sticky left chrome: logo + categories stay fixed.
+  Only .main (gallery / about + form) scrolls.
+*/
+.page {
+  display: grid;
+  grid-template-columns: minmax(280px, 45.8fr) minmax(0, 41fr) minmax(56px, 13.3fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header main chevrons"
+    "sidebar main chevrons";
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: var(--pad-top) 12px 0 var(--pad-x);
+  position: relative;
+  z-index: 4;
+}
+
+.logo {
+  flex: 0 0 auto;
+}
+
+.logo img {
+  display: block;
+  width: clamp(168px, 13.5vw, 260px);
+  height: auto;
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  /* kept near the mark; slightly tighter so the stronger nav + poptávka still sit in the left chrome */
+  margin-top: clamp(28px, 2.1vw, 42px);
+  margin-left: clamp(28px, 5.5vw, 96px);
+  font-size: clamp(14px, 0.86vw, 16.5px);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+}
+
+.top-nav .sep {
+  opacity: 0.65;
+  user-select: none;
+}
+
+.top-nav a {
+  color: var(--accent-soft);
+  padding: 0.2em 0.05em;
+}
+
+.top-nav a:hover,
+.top-nav a.active {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.top-nav a.active {
+  font-weight: 600;
+}
+
+.top-nav a.nav-cta {
+  margin-left: 4px;
+  padding: 0.38em 0.9em;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.top-nav a.nav-cta:hover,
+.top-nav a.nav-cta.active {
+  background: var(--accent);
+  color: #000;
+  opacity: 1;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  /* mockup: cats start ~215px below logo bottom */
+  padding: clamp(80px, 11vw, 220px) 32px 64px var(--pad-x);
+  overflow: hidden;
+}
+
+.cat-nav {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(30px, 2.2vw, 42px);
+}
+
+.cat {
+  font-size: clamp(14px, 0.86vw, 16.5px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  color: var(--accent-soft);
+  transition: color 0.2s ease;
+  line-height: 1.3;
+  max-width: 22em;
+}
+
+.cat:hover {
+  color: var(--accent);
+}
+
+.cat.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.main {
+  grid-area: main;
+  /* Align top padding with header (--pad-top); horizontal inset matches header right pad */
+  padding: var(--pad-top) 12px 80px 12px;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Scrollbar hidden until hover (Firefox) */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.main:hover,
+.main:focus-within {
+  scrollbar-color: var(--accent-dim) transparent;
+}
+
+.main::-webkit-scrollbar {
+  width: 6px;
+}
+
+.main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.main::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.main:hover::-webkit-scrollbar-thumb,
+.main:focus-within::-webkit-scrollbar-thumb {
+  background: var(--accent-dim);
+}
+
+.gallery {
+  position: relative;
+  width: 100%;
+  /* --gal-w / --gal-h set from measured PDF layout (pts) */
+}
+
+.gallery.masonry {
+  /* height from measured aspect so absolute children fill precisely */
+  width: 100%;
+  height: auto;
+}
+
+.gallery.masonry figure {
+  position: absolute;
+  margin: 0;
+  overflow: hidden;
+  background: #0a0a0a;
+  left: calc(var(--x) / var(--gal-w) * 100%);
+  top: calc(var(--y) / var(--gal-h) * 100%);
+  width: calc(var(--w) / var(--gal-w) * 100%);
+  height: calc(var(--h) / var(--gal-h) * 100%);
+}
+
+.gallery.masonry img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity 0.35s ease;
+}
+
+/* Fallback stacked rows (no layout.json) */
+.gallery.fallback-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter-y);
+}
+
+.gallery.fallback-rows .gallery-row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gutter-x);
+  width: 100%;
+}
+
+.gallery.fallback-rows figure {
+  margin: 0;
+  overflow: hidden;
+  background: #0a0a0a;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+.gallery.fallback-rows img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.gallery.loading img {
+  opacity: 0.3;
+}
+
+.about-panel {
+  width: 100%;
+  /* start near header band; slight offset so text breathes under logo */
+  margin-top: clamp(8px, 1.5vw, 28px);
+}
+
+.about-text {
+  margin: 0 0 1.35em;
+  font-size: clamp(12px, 0.73vw, 14px);
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--accent);
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
+.about-heading {
+  margin: 1.6em 0 0.45em;
+  font-size: clamp(12px, 0.73vw, 14px);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+
+.about-heading:first-child {
+  margin-top: 0;
+}
+
+.contact {
+  margin-top: 2.75em;
+  font-size: clamp(11px, 0.68vw, 13px);
+  font-weight: 400;
+  line-height: 1.95;
+}
+
+.contact p {
+  margin: 0;
+}
+
+.contact a:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+
+.contact .city {
+  margin-top: 0.85em;
+}
+
+/* Poptávkový formulář — fields per PDF: jméno, email, zpráva, odeslat */
+.inquiry-form {
+  margin-top: 2.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15em;
+  max-width: 28em;
+}
+
+.inquiry-form .field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+}
+
+.inquiry-form label {
+  font-size: clamp(11px, 0.68vw, 13px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  color: var(--accent);
+}
+
+.inquiry-form input,
+.inquiry-form textarea {
+  font: inherit;
+  font-weight: 300;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--accent-dim);
+  border-radius: 0;
+  padding: 0.65em 0.75em;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s ease;
+  resize: vertical;
+}
+
+.inquiry-form input:focus,
+.inquiry-form textarea:focus {
+  border-color: var(--accent);
+}
+
+.inquiry-form input[aria-invalid="true"],
+.inquiry-form textarea[aria-invalid="true"] {
+  border-color: var(--accent);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.field-error {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--accent);
+}
+
+.field-error[hidden] {
+  display: none;
+}
+
+.form-note {
+  margin: 0.15em 0 0;
+  font-size: clamp(11px, 0.68vw, 13px);
+  font-weight: 300;
+  color: var(--accent-soft);
+}
+
+.inquiry-form textarea {
+  min-height: 7.5em;
+}
+
+.inquiry-form .submit-btn {
+  align-self: flex-start;
+  margin-top: 0.35em;
+  padding: 0.7em 1.75em;
+  font-size: clamp(11px, 0.68vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: #000;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.inquiry-form .submit-btn:hover {
+  opacity: 0.88;
+}
+
+.chevrons {
+  grid-area: chevrons;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  height: 100%;
+  color: var(--accent);
+  opacity: 1;
+  z-index: 2;
+}
+
+.chev {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* clearer hit target (~52px) */
+  width: 52px;
+  height: 52px;
+  opacity: 1;
+  color: var(--accent);
+  transition: opacity 0.2s, transform 0.15s ease, filter 0.15s ease;
+}
+
+.chev:hover {
+  transform: scale(1.1);
+  filter: brightness(1.15);
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.chev:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.chev svg {
+  display: block;
+  width: clamp(36px, 2.6vw, 48px);
+  height: clamp(36px, 2.6vw, 48px);
+  stroke-width: 2.25;
+}
+
+.gallery figure:hover img {
+  opacity: 0.92;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Bottom fade sits over the gallery column; text hint is first-visit only. */
+.scroll-edge {
+  grid-area: main;
+  align-self: end;
+  z-index: 3;
+  height: 92px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 16px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.72) 55%, #000);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.scroll-edge.is-on {
+  opacity: 1;
+}
+
+.scroll-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--accent);
+}
+
+.scroll-hint[hidden] {
+  display: none;
+}
+
+.scroll-hint svg {
+  display: block;
+}
+
+@keyframes hint-nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.chev.hint-pulse {
+  animation: hint-nudge 1.35s ease-in-out 3;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  z-index: 20;
+  max-width: min(32rem, calc(100% - 32px));
+  margin: 0;
+  padding: 0.85em 1.15em;
+  background: #000;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.toast[hidden] {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  /* Close the empty band between category labels and the photos without moving the left chrome. */
+  .main,
+  .scroll-edge {
+    margin-left: clamp(-24px, -7vw, -140px);
+    width: calc(100% + clamp(24px, 7vw, 140px));
+  }
+}
+
+@media (max-width: 960px) {
+  body {
+    overflow: auto;
+    height: auto;
+  }
+
+  .page {
+    grid-template-columns: 1fr 44px;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "header chevrons"
+      "sidebar chevrons"
+      "main chevrons";
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px 24px 0;
+  }
+
+  .logo img {
+    width: 160px;
+  }
+
+  .top-nav {
+    margin-left: 0;
+    margin-top: 0;
+    font-size: 15px;
+  }
+
+  .top-nav a,
+  .cat {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .top-nav a.nav-cta {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    bottom: auto;
+    z-index: 8;
+    margin-left: 0;
+    background: #000;
+    box-shadow: 0 0 0 8px #000;
+  }
+
+  .scroll-edge {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    margin-left: 0;
+    height: 84px;
+    grid-area: auto;
+  }
+
+  .sidebar {
+    padding: 20px 24px 8px;
+  }
+
+  .cat-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 14px 22px;
+  }
+
+  .cat {
+    max-width: none;
+  }
+
+  .main {
+    padding: 16px 20px 48px;
+    height: auto;
+    overflow: visible;
+  }
+
+  .about-panel {
+    margin-top: 0;
+  }
+
+  .inquiry-form {
+    max-width: none;
+  }
+}
+
+@media (max-width: 560px) {
+  /* Stack masonry into a single column on narrow screens */
+  .gallery.masonry {
+    aspect-ratio: auto !important;
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .gallery.masonry figure {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .gallery.masonry img {
+    height: auto;
+    object-fit: contain;
+  }
+
+  .gallery.fallback-rows .gallery-row {
+    flex-direction: column;
+  }
+
+  .chevrons {
+    display: none;
+  }
+
+  .page {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "sidebar"
+      "main";
+  }
+
+  .about-text {
+    text-align: left;
+  }
+
+  .scroll-hint {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .gallery.masonry img,
+  .chev,
+  .cat,
+  .inquiry-form input,
+  .inquiry-form textarea,
+  .inquiry-form .submit-btn,
+  .scroll-edge,
+  .toast,
+  .top-nav a {
+    transition: none;
+  }
+
+  .chev.hint-pulse {
+    animation: none;
+  }
+}
