@@ -158,6 +158,7 @@ button {
 }
 
 .cat {
+  align-self: flex-start;
   font-size: clamp(14px, 0.86vw, 16.5px);
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -283,6 +284,10 @@ button {
   width: 100%;
   /* start near header band; slight offset so text breathes under logo */
   margin-top: clamp(8px, 1.5vw, 28px);
+}
+
+.about-inner {
+  max-width: 46rem;
 }
 
 .about-text {
@@ -563,12 +568,21 @@ button {
   display: none;
 }
 
-@media (min-width: 1100px) {
-  /* Close the empty band between category labels and the photos without moving the left chrome. */
-  .main,
-  .scroll-edge {
-    margin-left: clamp(-24px, -7vw, -140px);
-    width: calc(100% + clamp(24px, 7vw, 140px));
+@media (min-width: 961px) {
+  /* Keep the left chrome, but don't leave a wide empty band before the photos. */
+  .page {
+    grid-template-columns: minmax(400px, 32vw) minmax(0, 1fr) minmax(68px, 96px);
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .top-nav {
+    margin-left: 0;
+    margin-top: 0;
   }
 }
 

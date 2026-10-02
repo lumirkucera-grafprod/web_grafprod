@@ -271,6 +271,11 @@
   mainEl.addEventListener("scroll", scheduleAffordance, { passive: true });
   window.addEventListener("scroll", scheduleAffordance, { passive: true });
   window.addEventListener("resize", scheduleAffordance);
+  if (typeof ResizeObserver === "function") {
+    const ro = new ResizeObserver(scheduleAffordance);
+    ro.observe(galleryEl);
+    ro.observe(document.body);
+  }
 
   function isTypingTarget(el) {
     if (!el || !el.closest) return false;
