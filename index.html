@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GRAFIKAPRODUKCE</title>
+  <meta name="description" content="Grafika a produkce — unikátní vizuální identita a grafika interiérů." />
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+  <meta property="og:title" content="GRAFIKAPRODUKCE" />
+  <meta property="og:description" content="Grafika a produkce — unikátní vizuální identita a grafika interiérů." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="#" class="logo" id="logo-home" aria-label="GRAFIKAPRODUKCE — domů">
+        <img src="assets/logo.png" alt="GRAFIKAPRODUKCE" width="260" height="123" />
+      </a>
+      <nav class="top-nav" aria-label="Hlavní navigace">
+        <a href="#onas" data-section="about">o nás</a>
+        <span class="sep" aria-hidden="true">|</span>
+        <a href="#kontakt" data-section="about">kontakt</a>
+      </nav>
+    </header>
+
+    <aside class="sidebar" aria-label="Kategorie">
+      <nav class="cat-nav">
+        <button type="button" class="cat active" data-cat="commercial">komerční interiéry</button>
+        <button type="button" class="cat" data-cat="residential">rezidenční interiéry</button>
+        <button type="button" class="cat" data-cat="branding">branding</button>
+        <button type="button" class="cat" data-cat="mirror">grafika prosvětlená zrcadlem</button>
+      </nav>
+    </aside>
+
+    <main class="main" id="main">
+      <section class="gallery-panel" id="gallery-panel" aria-live="polite">
+        <div class="gallery" id="gallery"></div>
+      </section>
+
+      <section class="about-panel" id="about" hidden>
+        <div class="about-inner">
+          <h2 class="about-heading">Branding</h2>
+          <p class="about-text">
+            Vytvoříme pro vás jedinečnou identitu značky. Logo, barvy, typografii. Pomáháme vizuálně komunikovat. Víme, že vizuální styl musí působit skvěle ve všech aplikacích od on-line prostoru až po vizitky, katalogy, reklamní předměty a architekturu.
+          </p>
+          <h2 class="about-heading">Komerční interiéry</h2>
+          <p class="about-text">
+            Navrhneme grafický design retailového prostoru, restaurace, bistra nebo kanceláře v symbióze s vaším vizuálním stylem. Prostor díky grafice komunikuje se svými uživateli, vytváří originální atmosféru a pomáhá v orientaci. Pokud přemýšlíte o redesignu nebo stojíte na začátku vašeho projektu, rádi vám pomůžeme. Využíváme řadu grafických prostředků a materiálů včetně 3D světelných panelů.
+          </p>
+          <h2 class="about-heading">Rezidenční interiéry</h2>
+          <p class="about-text">
+            Našim cílem je vytvořit něco vizuálně originálního a poutavého, co přinese okamžik vizuálního potěšení. Nemusí to být jen grafika adjustovaná v rámu. Digitální tisk aplikujeme na bezrámové desky s tvarovým výřezem, velkoplošné samolepící folie, řezanou fóliovou grafiku, lentikulární tisk a další. Ke každému interiéru přistupujeme individuálně.
+          </p>
+          <h2 class="about-heading">Grafika prosvětlená zrcadlem</h2>
+          <p class="about-text">
+            Grafická technika, která se stane dominantou interiéru. Ambientní osvětlení vyrábíme v různých velikostech, tvarech a barvách. V rámu nebo s podsvícením.
+          </p>
+          <div class="contact" id="kontakt">
+            <p>grafika | Lumír Kučera | <a href="mailto:lumir@grafikaprodukce.cz">lumir@grafikaprodukce.cz</a> | <a href="tel:+420732828692">732&nbsp;828&nbsp;692</a></p>
+            <p>produkce | Lucie Kučerová | <a href="mailto:lucie@grafikaprodukce.cz">lucie@grafikaprodukce.cz</a> | <a href="tel:+420731450001">731&nbsp;450&nbsp;001</a></p>
+            <p class="city">Praha 6</p>
+          </div>
+
+          <form class="inquiry-form" id="inquiry-form" action="mailto:lumir@grafikaprodukce.cz" method="post" enctype="text/plain">
+            <div class="field">
+              <label for="inq-name">jméno</label>
+              <input type="text" id="inq-name" name="jméno" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="inq-email">email</label>
+              <input type="email" id="inq-email" name="email" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="inq-msg">zpráva</label>
+              <textarea id="inq-msg" name="zpráva" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">odeslat</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <div class="chevrons">
+      <button type="button" class="chev" id="chev-up" title="Nahoru" aria-label="Nahoru">
+        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg>
+      </button>
+      <button type="button" class="chev" id="chev-down" title="Dolů" aria-label="Dolů">
+        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="assets/layout.embedded.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
