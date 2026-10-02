@@ -5,36 +5,12 @@ Statický jednostránkový web podle PDF mockupu (`web_grafikaprodukce`).
 ## Otevření
 
 ```bash
-cd c:\web_grafprod
-python -m http.server 8765
+cd /workspace/grafikaprodukce/site
+python3 -m http.server 8765
 # http://localhost:8765/
 ```
 
 (Layout je embedded v `assets/layout.embedded.js` — funguje i přes `file://`. Lokální server je volitelný.)
-
-## Nasazení na Vercel
-
-Statický web — žádný build. Kořen projektu = `index.html`.
-
-### CLI (rychle)
-
-```bash
-npm i -g vercel
-cd c:\web_grafprod
-vercel
-```
-
-Pro produkci: `vercel --prod`.
-
-V dashboardu: Framework Preset **Other**, Build Command prázdný, Output Directory `.` (nebo prázdné).
-
-### Git + automatický deploy
-
-1. Inicializuj repo a pushni na GitHub/GitLab.
-2. Na [vercel.com/new](https://vercel.com/new) importuj projekt.
-3. Preset **Other**, bez buildu — Vercel nasadí kořen jako static.
-
-`vercel.json` nastavuje `cleanUrls` a cache hlavičky pro galerii (dlouhodobě) a CSS/JS/JSON.
 
 ## Struktura
 
