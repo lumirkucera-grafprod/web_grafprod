@@ -226,6 +226,37 @@ button {
   /* height from measured aspect so absolute children fill precisely */
   width: 100%;
   height: auto;
+  container-type: inline-size;
+}
+
+/* Grafický design captions, same weight as the PDF (regular, not a heading). */
+.gallery.masonry .gallery-copy {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  z-index: 1;
+  pointer-events: none;
+  color: var(--accent);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-align: left;
+  hyphens: manual;
+  line-height: 1.2;
+  font-size: clamp(14px, 1.2vw, 22px);
+  font-size: calc(22 / var(--gal-w, 786.72) * 100cqi);
+  top: calc(var(--y) / var(--gal-h) * 100%);
+  white-space: pre-line;
+}
+
+.gallery.fallback-rows .gallery-copy {
+  position: relative;
+  margin: 0 0 0.85em;
+  color: var(--accent);
+  font-weight: 400;
+  line-height: 1.45;
+  font-size: clamp(15px, 1.3vw, 20px);
+  white-space: pre-line;
 }
 
 .gallery.masonry figure {
@@ -699,6 +730,23 @@ button {
   .gallery.masonry img {
     height: auto;
     object-fit: contain;
+  }
+
+  .gallery.masonry figure,
+  .gallery.masonry .gallery-copy {
+    order: var(--stack);
+  }
+
+  .gallery.masonry .gallery-copy {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    padding: 8px 0 4px;
+    font-size: clamp(16px, 4.4vw, 20px);
+    line-height: 1.45;
+    pointer-events: none;
   }
 
   .gallery.fallback-rows .gallery-row {

@@ -23,15 +23,28 @@
   const CAT_LABEL = {
     commercial: "Komerční interiéry",
     residential: "Rezidenční interiéry",
-    branding: "Branding",
+    branding: "Grafický design",
     mirror: "Grafika prosvětlená zrcadlem",
   };
   const CAT_ALT = {
     commercial: "Komerční interiér",
     residential: "Rezidenční interiér",
-    branding: "Branding",
+    branding: "Grafický design",
     mirror: "Grafika prosvětlená zrcadlem",
   };
+  /* Captions from the grafický design PDF, y in the same gallery points as layout.json. */
+  const BRANDING_COPY = [
+    { y: 0, text: "Navrhneme a realizujeme kompletní branding" },
+    { y: 1392.73, text: "Vytvoříme pro vás značku, logo" },
+    {
+      y: 1918.84,
+      text: "Navrhneme design a vyrobíme prostředky pro vaši\nin-store komunikaci",
+    },
+    {
+      y: 3758.59,
+      text: "Vytvoříme pro vás vizuální identitu a aplikujeme do reálného i digitálního světa. Navrhneme obaly, katalogy, prezentace, bannery nebo grafiku na auta tak, aby každé setkání s vaší firmou zanechalo perfektní dojem.",
+    },
+  ];
 
   const COUNTS = { commercial: 29, residential: 15, branding: 18, mirror: 8 };
   Object.keys(COUNTS).forEach((cat) => {
@@ -64,6 +77,12 @@
       .replace(/&/g, "&amp;")
       .replace(/"/g, "&quot;")
       .replace(/</g, "&lt;");
+  }
+
+  function brandingCopyMarkup() {
+    return BRANDING_COPY.map((block) => {
+      return `<p class="gallery-copy" style="--y:${block.y};--stack:${Math.round(block.y)}">${esc(block.text)}</p>`;
+    }).join("");
   }
 
   function hintSeen() {
@@ -138,11 +157,12 @@
         .map((item, i) => {
           const src = assetUrl(`assets/gallery/${cat}/${item.file}`);
           const alt = esc(altText(cat, i));
-          return `<figure style="--x:${item.x};--y:${item.y};--w:${item.w};--h:${item.h}" data-i="${i}"><img src="${src}" alt="${alt}" width="${item.px_w || Math.round(item.w)}" height="${
+          return `<figure style="--x:${item.x};--y:${item.y};--w:${item.w};--h:${item.h};--stack:${Math.round(item.y)}" data-i="${i}"><img src="${src}" alt="${alt}" width="${item.px_w || Math.round(item.w)}" height="${
             item.px_h || Math.round(item.h)
           }" loading="${i < 8 ? "eager" : "lazy"}" decoding="async" /></figure>`;
         })
         .join("");
+      if (cat === "branding") galleryEl.insertAdjacentHTML("beforeend", brandingCopyMarkup());
     } else {
       galleryEl.classList.remove("masonry");
       galleryEl.classList.add("fallback-rows");
@@ -151,7 +171,7 @@
       galleryEl.style.aspectRatio = "";
       const list = images[cat] || [];
       count = list.length;
-      galleryEl.innerHTML = list
+      galleryEl.innerHTML = (cat === "branding" ? brandingCopyMarkup() : "") + list
         .map((src, i) => {
           const alt = esc(altText(cat, i));
           return `<div class="gallery-row full"><figure><img src="${assetUrl(src)}" alt="${alt}" loading="${
