@@ -2,6 +2,18 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/navrh",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/navrh/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/assets/gallery/(.*)",
@@ -13,7 +25,7 @@
       ]
     },
     {
-      "source": "/navrh/assets/gallery/(.*)",
+      "source": "/puvodni/assets/gallery/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -22,7 +34,7 @@
       ]
     },
     {
-      "source": "/navrh/assets/(.*)",
+      "source": "/puvodni/assets/(.*)",
       "headers": [
         {
           "key": "Cache-Control",

@@ -80,7 +80,7 @@ button {
   flex-wrap: wrap;
   padding: var(--pad-top) 12px 0 var(--pad-x);
   position: relative;
-  z-index: 4;
+  z-index: 2;
 }
 
 .logo {
@@ -96,52 +96,20 @@ button {
 .top-nav {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 10px 14px;
-  /* kept near the mark; slightly tighter so the stronger nav + poptávka still sit in the left chrome */
+  gap: 10px;
+  /* mockup: ~168px after logo, near mark height; may sit over gallery gap */
   margin-top: clamp(28px, 2.1vw, 42px);
-  margin-left: clamp(28px, 5.5vw, 96px);
-  font-size: clamp(14px, 0.86vw, 16.5px);
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  margin-left: clamp(36px, 8.75vw, 168px);
+  font-size: clamp(12px, 0.72vw, 14px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
   text-transform: lowercase;
+  white-space: nowrap;
 }
 
 .top-nav .sep {
   opacity: 0.65;
   user-select: none;
-}
-
-.top-nav a {
-  color: var(--accent-soft);
-  padding: 0.2em 0.05em;
-}
-
-.top-nav a:hover,
-.top-nav a.active {
-  color: var(--accent);
-  opacity: 1;
-}
-
-.top-nav a.active {
-  font-weight: 600;
-}
-
-.top-nav a.nav-cta {
-  margin-left: 4px;
-  padding: 0.38em 0.9em;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  line-height: 1.2;
-}
-
-.top-nav a.nav-cta:hover,
-.top-nav a.nav-cta.active {
-  background: var(--accent);
-  color: #000;
-  opacity: 1;
 }
 
 .sidebar {
@@ -158,7 +126,6 @@ button {
 }
 
 .cat {
-  align-self: flex-start;
   font-size: clamp(14px, 0.86vw, 16.5px);
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -226,37 +193,6 @@ button {
   /* height from measured aspect so absolute children fill precisely */
   width: 100%;
   height: auto;
-  container-type: inline-size;
-}
-
-/* Grafický design captions, same weight as the PDF (regular, not a heading). */
-.gallery.masonry .gallery-copy {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  margin: 0;
-  z-index: 1;
-  pointer-events: none;
-  color: var(--accent);
-  font-weight: 400;
-  letter-spacing: 0;
-  text-align: left;
-  hyphens: manual;
-  line-height: 1.2;
-  font-size: clamp(14px, 1.2vw, 22px);
-  font-size: calc(22 / var(--gal-w, 786.72) * 100cqi);
-  top: calc(var(--y) / var(--gal-h) * 100%);
-  white-space: pre-line;
-}
-
-.gallery.fallback-rows .gallery-copy {
-  position: relative;
-  margin: 0 0 0.85em;
-  color: var(--accent);
-  font-weight: 400;
-  line-height: 1.45;
-  font-size: clamp(15px, 1.3vw, 20px);
-  white-space: pre-line;
 }
 
 .gallery.masonry figure {
@@ -315,10 +251,6 @@ button {
   width: 100%;
   /* start near header band; slight offset so text breathes under logo */
   margin-top: clamp(8px, 1.5vw, 28px);
-}
-
-.about-inner {
-  max-width: 46rem;
 }
 
 .about-text {
@@ -408,31 +340,6 @@ button {
   border-color: var(--accent);
 }
 
-.inquiry-form input[aria-invalid="true"],
-.inquiry-form textarea[aria-invalid="true"] {
-  border-color: var(--accent);
-  box-shadow: inset 3px 0 0 var(--accent);
-}
-
-.field-error {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: var(--accent);
-}
-
-.field-error[hidden] {
-  display: none;
-}
-
-.form-note {
-  margin: 0.15em 0 0;
-  font-size: clamp(11px, 0.68vw, 13px);
-  font-weight: 300;
-  color: var(--accent-soft);
-}
-
 .inquiry-form textarea {
   min-height: 7.5em;
 }
@@ -507,15 +414,6 @@ button {
   filter: brightness(1.15);
 }
 
-:focus {
-  outline: none;
-}
-
-:focus-visible {
-  outline: 1px solid var(--accent);
-  outline-offset: 3px;
-}
-
 .chev:focus-visible {
   outline: 1px solid var(--accent);
   outline-offset: 2px;
@@ -530,113 +428,6 @@ button {
 
 .gallery figure:hover img {
   opacity: 0.92;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Bottom fade sits over the gallery column; text hint is first-visit only. */
-.scroll-edge {
-  grid-area: main;
-  align-self: end;
-  z-index: 3;
-  height: 92px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 16px;
-  pointer-events: none;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.72) 55%, #000);
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-.scroll-edge.is-on {
-  opacity: 1;
-}
-
-.scroll-hint {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: lowercase;
-  color: var(--accent);
-}
-
-.scroll-hint[hidden] {
-  display: none;
-}
-
-.scroll-hint svg {
-  display: block;
-}
-
-@keyframes hint-nudge {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(6px);
-  }
-}
-
-.chev.hint-pulse {
-  animation: hint-nudge 1.35s ease-in-out 3;
-}
-
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 28px;
-  transform: translateX(-50%);
-  z-index: 20;
-  max-width: min(32rem, calc(100% - 32px));
-  margin: 0;
-  padding: 0.85em 1.15em;
-  background: #000;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  line-height: 1.45;
-  text-align: center;
-}
-
-.toast[hidden] {
-  display: none;
-}
-
-@media (min-width: 961px) {
-  /* Keep the left chrome, but don't leave a wide empty band before the photos. */
-  .page {
-    grid-template-columns: minmax(400px, 32vw) minmax(0, 1fr) minmax(68px, 96px);
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 18px;
-  }
-
-  .top-nav {
-    margin-left: 0;
-    margin-top: 0;
-  }
 }
 
 @media (max-width: 960px) {
@@ -670,36 +461,6 @@ button {
   .top-nav {
     margin-left: 0;
     margin-top: 0;
-    font-size: 15px;
-  }
-
-  .top-nav a,
-  .cat {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .top-nav a.nav-cta {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    bottom: auto;
-    z-index: 8;
-    margin-left: 0;
-    background: #000;
-    box-shadow: 0 0 0 8px #000;
-  }
-
-  .scroll-edge {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: auto;
-    margin-left: 0;
-    height: 84px;
-    grid-area: auto;
   }
 
   .sidebar {
@@ -754,23 +515,6 @@ button {
     object-fit: contain;
   }
 
-  .gallery.masonry figure,
-  .gallery.masonry .gallery-copy {
-    order: var(--stack);
-  }
-
-  .gallery.masonry .gallery-copy {
-    position: relative;
-    top: auto;
-    left: auto;
-    width: 100%;
-    height: auto;
-    padding: 8px 0 4px;
-    font-size: clamp(16px, 4.4vw, 20px);
-    line-height: 1.45;
-    pointer-events: none;
-  }
-
   .gallery.fallback-rows .gallery-row {
     flex-direction: column;
   }
@@ -789,31 +533,5 @@ button {
 
   .about-text {
     text-align: left;
-  }
-
-  .scroll-hint {
-    font-size: 13px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .gallery.masonry img,
-  .chev,
-  .cat,
-  .inquiry-form input,
-  .inquiry-form textarea,
-  .inquiry-form .submit-btn,
-  .scroll-edge,
-  .toast,
-  .top-nav a {
-    transition: none;
-  }
-
-  .chev.hint-pulse {
-    animation: none;
   }
 }
