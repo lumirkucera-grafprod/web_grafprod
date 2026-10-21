@@ -418,6 +418,7 @@
       setFieldError(msgInput, msgMsg);
       const firstInvalid = nameMsg ? nameInput : emailMsg ? emailInput : msgMsg ? msgInput : null;
       if (firstInvalid) {
+        setFormStatus(statusEl, "");
         firstInvalid.focus({ preventScroll: true });
         scrollToEl(firstInvalid);
         showToast("Zkontrolujte prosím vyplněná pole.", "error");

@@ -158,6 +158,9 @@
 
   const form = document.getElementById("inquiry-form");
   if (form) {
+    // With this script, show the Czech status instead of the browser bubble.
+    // Without JS, the required attributes still guard the FormSubmit post.
+    form.noValidate = true;
     const statusEl = document.getElementById("inq-status");
     const submitBtn = form.querySelector(".submit-btn");
     const btnLabel = submitBtn ? submitBtn.textContent : "odeslat";
