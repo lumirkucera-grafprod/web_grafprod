@@ -364,9 +364,49 @@
     });
   });
 
+
+  const FORM_ENDPOINT = "https://formsubmit.co/ajax/lumir@grafikaprodukce.cz";
+  const FORM_OK_MSG = "Děkujeme, poptávka byla odeslána. Ozveme se vám co nejdříve.";
+  const FORM_ERR_MSG = "Odeslání se nepovedlo. Napište nám prosím na lumir@grafikaprodukce.cz.";
+
+  async function sendInquiry(formEl, email) {
+    const payload = {};
+    new FormData(formEl).forEach((value, key) => {
+      payload[key] = typeof value === "string" ? value.trim() : value;
+    });
+    payload._subject = "Nová poptávka z webu grafikaprodukce.cz";
+    payload._template = "table";
+    payload._captcha = "false";
+    if (email) payload._replyto = email;
+    const res = await fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || String(data.success) !== "true") {
+      throw new Error((data && data.message) || `HTTP ${res.status}`);
+    }
+    return data;
+  }
+
+  function setFormStatus(el, message, tone) {
+    if (!el) return;
+    el.hidden = !message;
+    el.textContent = message || "";
+    if (tone) el.dataset.tone = tone;
+    else delete el.dataset.tone;
+  }
+
+  const statusEl = document.getElementById("inq-status");
+  const submitBtn = form ? form.querySelector(".submit-btn") : null;
+  const btnLabel = submitBtn ? submitBtn.textContent : "odeslat";
+  let sending = false;
+
   if (form) {
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (sending) return;
       const name = nameInput.value.trim();
       const email = emailInput.value.trim();
       const msg = msgInput.value.trim();
@@ -383,11 +423,27 @@
         showToast("Zkontrolujte prosím vyplněná pole.", "error");
         return;
       }
-      const subject = encodeURIComponent("Poptávka — GRAFIKAPRODUKCE");
-      const body = encodeURIComponent(`jméno: ${name}\nemail: ${email}\n\nzpráva:\n${msg}`);
-      const href = `mailto:lumir@grafikaprodukce.cz?subject=${subject}&body=${body}`;
-      showToast("Děkujeme. Zpráva je připravená v e-mailu — po odeslání se vám ozveme.", "ok");
-      window.location.href = href;
+      sending = true;
+      setFormStatus(statusEl, "");
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Odesílám…";
+      }
+      try {
+        await sendInquiry(form, email);
+        form.reset();
+        setFormStatus(statusEl, FORM_OK_MSG, "ok");
+        showToast(FORM_OK_MSG, "ok");
+      } catch (err) {
+        setFormStatus(statusEl, FORM_ERR_MSG, "error");
+        showToast(FORM_ERR_MSG, "error");
+      } finally {
+        sending = false;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = btnLabel;
+        }
+      }
     });
   }
 

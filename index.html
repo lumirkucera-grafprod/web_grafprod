@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=form2" />
 </head>
 <body>
   <div class="page">
@@ -62,7 +62,11 @@
             <p class="city">Praha 6</p>
           </div>
 
-          <form class="inquiry-form" id="inquiry-form" action="mailto:lumir@grafikaprodukce.cz" method="post" enctype="text/plain">
+          <form class="inquiry-form" id="inquiry-form" action="https://formsubmit.co/lumir@grafikaprodukce.cz" method="post">
+            <input type="hidden" name="_subject" value="Nová poptávka z webu grafikaprodukce.cz" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="text" name="_honey" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none" />
             <div class="field">
               <label for="inq-name">jméno</label>
               <input type="text" id="inq-name" name="jméno" autocomplete="name" required />
@@ -76,6 +80,7 @@
               <textarea id="inq-msg" name="zpráva" rows="5" required></textarea>
             </div>
             <button type="submit" class="submit-btn">odeslat</button>
+            <p class="form-status" id="inq-status" role="status" aria-live="polite" hidden></p>
           </form>
         </div>
       </section>
@@ -92,6 +97,6 @@
   </div>
 
   <script src="assets/layout.embedded.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=form2"></script>
 </body>
 </html>
