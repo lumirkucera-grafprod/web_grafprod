@@ -21,6 +21,26 @@
       "source": "/puvodni/",
       "destination": "/puvodni",
       "permanent": true
+    },
+    {
+      "source": "/inner",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/inner/",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/inner.html",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/img/:path*",
+      "destination": "/",
+      "statusCode": 301
     }
   ],
   "headers": [

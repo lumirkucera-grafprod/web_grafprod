@@ -151,6 +151,31 @@ button {
   overflow: hidden;
 }
 
+/* Page title sits in the empty band above the categories so the
+   gallery, logo and navigation keep their places. */
+h1 {
+  margin: 0;
+  max-width: 22em;
+  font-size: clamp(12px, 0.73vw, 14px);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
+@media (min-width: 961px) {
+  .sidebar {
+    position: relative;
+  }
+
+  h1 {
+    position: absolute;
+    left: var(--pad-x);
+    right: 32px;
+    top: clamp(16px, 2.4vw, 40px);
+  }
+}
+
 .cat-nav {
   display: flex;
   flex-direction: column;
@@ -704,6 +729,13 @@ button {
 
   .sidebar {
     padding: 20px 24px 8px;
+  }
+
+  h1 {
+    position: static;
+    margin: 0 0 16px;
+    max-width: 28em;
+    font-size: 14px;
   }
 
   .cat-nav {
