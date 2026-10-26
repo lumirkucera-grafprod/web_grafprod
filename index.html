@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=home2" />
+  <link rel="stylesheet" href="styles.css?v=lb1" />
 </head>
 <body>
   <div class="page">
@@ -154,7 +154,25 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+  <dialog class="lightbox" id="lightbox" aria-modal="true" aria-labelledby="lightbox-title">
+    <p class="sr-only" id="lightbox-title">Zvětšená fotografie</p>
+    <button type="button" class="lightbox-ctrl lightbox-prev" data-lightbox="prev" aria-label="Předchozí fotografie">
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="14 6 8 12 14 18"/></svg>
+    </button>
+    <button type="button" class="lightbox-ctrl lightbox-next" data-lightbox="next" aria-label="Další fotografie">
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="10 6 16 12 10 18"/></svg>
+    </button>
+    <button type="button" class="lightbox-ctrl lightbox-close" data-lightbox="close" aria-label="Zavřít">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+    <div class="lightbox-stage">
+      <img id="lightbox-img" alt="" />
+    </div>
+    <p class="lightbox-count" id="lightbox-count" aria-hidden="true"></p>
+    <p class="sr-only" id="lightbox-status" aria-live="polite"></p>
+  </dialog>
+
   <script src="assets/layout.embedded.js?v=home1"></script>
-  <script src="app.js?v=home1"></script>
+  <script src="app.js?v=lb1"></script>
 </body>
 </html>
