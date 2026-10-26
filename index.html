@@ -3,20 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GRAFIKAPRODUKCE</title>
-  <meta name="description" content="Grafika a produkce — unikátní vizuální identita a grafika interiérů." />
+  <title>Grafika do interiérů a kanceláří, orientační systémy | GRAFIKAPRODUKCE</title>
+  <meta name="description" content="Navrhujeme a vyrábíme grafiku pro komerční interiéry: wall design, kompletní grafiku kanceláří, orientační systémy a polepy skel. Pro architekty, fit-out firmy i firmy. Praha." />
   <link rel="canonical" href="https://www.grafikaprodukce.cz/" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" href="assets/logo.png" type="image/png" />
-  <meta property="og:title" content="GRAFIKAPRODUKCE" />
-  <meta property="og:description" content="Grafika a produkce — unikátní vizuální identita a grafika interiérů." />
+  <meta property="og:title" content="Grafika do interiérů a kanceláří, orientační systémy | GRAFIKAPRODUKCE" />
+  <meta property="og:description" content="Navrhujeme a vyrábíme grafiku pro komerční interiéry: wall design, kompletní grafiku kanceláří, orientační systémy a polepy skel. Pro architekty, fit-out firmy i firmy. Praha." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.grafikaprodukce.cz/" />
   <meta property="og:image" content="https://www.grafikaprodukce.cz/assets/logo.png" />
+  <meta property="og:locale" content="cs_CZ" />
+  <meta property="og:site_name" content="GRAFIKAPRODUKCE" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#000000" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "GRAFIKAPRODUKCE",
+    "url": "https://www.grafikaprodukce.cz/",
+    "logo": "https://www.grafikaprodukce.cz/assets/logo.png",
+    "image": "https://www.grafikaprodukce.cz/assets/logo.png",
+    "email": ["lumir@grafikaprodukce.cz", "lucie@grafikaprodukce.cz"],
+    "telephone": ["+420732828692", "+420731450001"],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Praha 6"
+    },
+    "employee": [
+      {
+        "@type": "Person",
+        "name": "Lumír Kučera",
+        "jobTitle": "grafika",
+        "email": "lumir@grafikaprodukce.cz",
+        "telephone": "+420732828692"
+      },
+      {
+        "@type": "Person",
+        "name": "Lucie Kučerová",
+        "jobTitle": "produkce",
+        "email": "lucie@grafikaprodukce.cz",
+        "telephone": "+420731450001"
+      }
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=home1" />
+  <link rel="stylesheet" href="styles.css?v=lb1" />
 </head>
 <body>
   <div class="page">
@@ -33,6 +69,7 @@
     </header>
 
     <aside class="sidebar" aria-label="Kategorie">
+      <h1>Design a výroba grafiky pro komerční interiéry</h1>
       <nav class="cat-nav">
         <button type="button" class="cat active" data-cat="commercial">komerční interiéry</button>
         <button type="button" class="cat" data-cat="residential">rezidenční interiéry</button>
@@ -117,7 +154,25 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+  <dialog class="lightbox" id="lightbox" aria-modal="true" aria-labelledby="lightbox-title">
+    <p class="sr-only" id="lightbox-title">Zvětšená fotografie</p>
+    <button type="button" class="lightbox-ctrl lightbox-prev" data-lightbox="prev" aria-label="Předchozí fotografie">
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="14 6 8 12 14 18"/></svg>
+    </button>
+    <button type="button" class="lightbox-ctrl lightbox-next" data-lightbox="next" aria-label="Další fotografie">
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="10 6 16 12 10 18"/></svg>
+    </button>
+    <button type="button" class="lightbox-ctrl lightbox-close" data-lightbox="close" aria-label="Zavřít">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+    <div class="lightbox-stage">
+      <img id="lightbox-img" alt="" />
+    </div>
+    <p class="lightbox-count" id="lightbox-count" aria-hidden="true"></p>
+    <p class="sr-only" id="lightbox-status" aria-live="polite"></p>
+  </dialog>
+
   <script src="assets/layout.embedded.js?v=home1"></script>
-  <script src="app.js?v=home1"></script>
+  <script src="app.js?v=lb1"></script>
 </body>
 </html>

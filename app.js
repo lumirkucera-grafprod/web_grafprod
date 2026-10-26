@@ -10,6 +10,10 @@
   const scrollHint = document.getElementById("scroll-hint");
   const chevDown = document.getElementById("chev-down");
   const toast = document.getElementById("toast");
+  const lightboxEl = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+  const lightboxCount = document.getElementById("lightbox-count");
+  const lightboxStatus = document.getElementById("lightbox-status");
 
   const HINT_KEY = "gp-navrh-scroll-hint";
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -19,6 +23,9 @@
   let layouts = null;
   let images = {};
   let toastTimer = 0;
+  let slides = [];
+  let lightboxIndex = 0;
+  let lightboxTrigger = null;
 
   const CAT_LABEL = {
     commercial: "Komerční interiéry",
@@ -137,7 +144,15 @@
     });
   }
 
+  function photoButton(index, src, alt, width, height) {
+    const size = width && height ? ` width="${width}" height="${height}"` : "";
+    return `<button type="button" class="gallery-open" data-i="${index}" aria-label="Zvětšit fotografii: ${alt}"><img src="${esc(src)}" alt="${alt}"${size} loading="${
+      index < 8 ? "eager" : "lazy"
+    }" decoding="async" /></button>`;
+  }
+
   function renderGallery(cat) {
+    if (lightboxEl && lightboxEl.open) lightboxEl.close();
     galleryEl.classList.add("loading");
     galleryEl.innerHTML = "";
 
@@ -152,14 +167,24 @@
       galleryEl.classList.add("masonry");
       galleryEl.classList.remove("fallback-rows");
       count = layout.items.length;
+      slides = layout.items.map((item, i) => ({
+        src: assetUrl(`assets/gallery/${cat}/${item.file}`),
+        alt: altText(cat, i),
+        w: item.px_w || Math.round(item.w),
+        h: item.px_h || Math.round(item.h),
+      }));
 
       galleryEl.innerHTML = layout.items
         .map((item, i) => {
-          const src = assetUrl(`assets/gallery/${cat}/${item.file}`);
-          const alt = esc(altText(cat, i));
-          return `<figure style="--x:${item.x};--y:${item.y};--w:${item.w};--h:${item.h};--stack:${Math.round(item.y)}" data-i="${i}"><img src="${src}" alt="${alt}" width="${item.px_w || Math.round(item.w)}" height="${
-            item.px_h || Math.round(item.h)
-          }" loading="${i < 8 ? "eager" : "lazy"}" decoding="async" /></figure>`;
+          const slide = slides[i];
+          const alt = esc(slide.alt);
+          return `<figure style="--x:${item.x};--y:${item.y};--w:${item.w};--h:${item.h};--stack:${Math.round(item.y)}" data-i="${i}">${photoButton(
+            i,
+            slide.src,
+            alt,
+            slide.w,
+            slide.h
+          )}</figure>`;
         })
         .join("");
       if (cat === "branding") galleryEl.insertAdjacentHTML("beforeend", brandingCopyMarkup());
@@ -171,12 +196,14 @@
       galleryEl.style.aspectRatio = "";
       const list = images[cat] || [];
       count = list.length;
-      galleryEl.innerHTML = (cat === "branding" ? brandingCopyMarkup() : "") + list
-        .map((src, i) => {
-          const alt = esc(altText(cat, i));
-          return `<div class="gallery-row full"><figure><img src="${assetUrl(src)}" alt="${alt}" loading="${
-            i < 8 ? "eager" : "lazy"
-          }" decoding="async" /></figure></div>`;
+      slides = list.map((src, i) => ({
+        src: assetUrl(src),
+        alt: altText(cat, i),
+      }));
+      galleryEl.innerHTML = (cat === "branding" ? brandingCopyMarkup() : "") + slides
+        .map((slide, i) => {
+          const alt = esc(slide.alt);
+          return `<div class="gallery-row full"><figure>${photoButton(i, slide.src, alt)}</figure></div>`;
         })
         .join("");
     }
@@ -185,6 +212,111 @@
     galleryEl.setAttribute("aria-label", `${label}, ${photoPhrase(count)}`);
     if (galleryStatus) galleryStatus.textContent = `${label}, ${photoPhrase(count)}`;
     galleryEl.classList.remove("loading");
+  }
+
+  function lightboxButtons() {
+    return Array.from(lightboxEl.querySelectorAll("button"));
+  }
+
+  function showSlide(index) {
+    const n = slides.length;
+    if (!n || !lightboxImg) return;
+    lightboxIndex = ((index % n) + n) % n;
+    const slide = slides[lightboxIndex];
+    lightboxImg.alt = slide.alt;
+    if (slide.w) lightboxImg.width = slide.w;
+    if (slide.h) lightboxImg.height = slide.h;
+    lightboxImg.src = slide.src;
+    if (lightboxCount) lightboxCount.textContent = `${lightboxIndex + 1} / ${n}`;
+    if (lightboxStatus) {
+      lightboxStatus.textContent = `Fotografie ${lightboxIndex + 1} z ${n}, ${slide.alt}`;
+    }
+  }
+
+  function openLightbox(index, trigger) {
+    if (!lightboxEl || !slides.length) return;
+    lightboxTrigger = trigger || null;
+    if (!lightboxEl.open) lightboxEl.showModal();
+    showSlide(index);
+    const closeBtn = lightboxEl.querySelector(".lightbox-close");
+    if (closeBtn) closeBtn.focus({ preventScroll: true });
+  }
+
+  if (lightboxEl && lightboxImg) {
+    galleryEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".gallery-open");
+      if (!btn || !galleryEl.contains(btn)) return;
+      const index = Number(btn.dataset.i);
+      if (!Number.isInteger(index)) return;
+      openLightbox(index, btn);
+    });
+
+    lightboxEl.addEventListener("click", (e) => {
+      const ctrl = e.target.closest("[data-lightbox]");
+      if (ctrl) {
+        const action = ctrl.dataset.lightbox;
+        if (action === "close") lightboxEl.close();
+        else if (action === "prev") showSlide(lightboxIndex - 1);
+        else if (action === "next") showSlide(lightboxIndex + 1);
+        return;
+      }
+      if (e.target === lightboxEl) lightboxEl.close();
+    });
+
+    lightboxEl.addEventListener("close", () => {
+      lightboxImg.removeAttribute("src");
+      lightboxImg.alt = "";
+      if (lightboxCount) lightboxCount.textContent = "";
+      if (lightboxStatus) lightboxStatus.textContent = "";
+      const trigger = lightboxTrigger;
+      lightboxTrigger = null;
+      if (trigger && typeof trigger.focus === "function") trigger.focus({ preventScroll: true });
+    });
+
+    lightboxEl.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        showSlide(lightboxIndex - 1);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        showSlide(lightboxIndex + 1);
+      } else if (e.key === "Tab") {
+        const items = lightboxButtons();
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    let touchX = 0;
+    let touchY = 0;
+    lightboxEl.addEventListener(
+      "touchstart",
+      (e) => {
+        if (e.touches.length !== 1) return;
+        touchX = e.touches[0].clientX;
+        touchY = e.touches[0].clientY;
+      },
+      { passive: true }
+    );
+    lightboxEl.addEventListener(
+      "touchend",
+      (e) => {
+        if (!lightboxEl.open || !e.changedTouches.length) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        const dy = e.changedTouches[0].clientY - touchY;
+        if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+        showSlide(lightboxIndex + (dx < 0 ? 1 : -1));
+      },
+      { passive: true }
+    );
   }
 
   function setNavActive(key) {
@@ -303,6 +435,7 @@
   }
 
   document.addEventListener("keydown", (e) => {
+    if (lightboxEl && lightboxEl.open) return;
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     if (isTypingTarget(e.target)) return;
     const behavior = e.repeat || reduceMotion.matches ? "auto" : "smooth";
