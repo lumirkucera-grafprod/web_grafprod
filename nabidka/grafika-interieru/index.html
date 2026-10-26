@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css?v=home1" />
-  <link rel="stylesheet" href="/nabidka/grafika-interieru/offer.css?v=4" />
+  <link rel="stylesheet" href="/nabidka/grafika-interieru/offer.css?v=5" />
 </head>
 <body class="offer-page">
   <div class="offer-frame">
@@ -148,15 +148,9 @@
             </div>
             <div class="field">
               <label for="offer-email">e-mail</label>
-              <input type="email" id="offer-email" name="email" autocomplete="email" inputmode="email" spellcheck="false" maxlength="200" aria-describedby="offer-email-error" />
+              <input type="email" id="offer-email" name="email" autocomplete="email" inputmode="email" spellcheck="false" required maxlength="200" aria-required="true" aria-describedby="offer-email-error" />
               <p class="field-error" id="offer-email-error" hidden></p>
             </div>
-            <div class="field">
-              <label for="offer-phone">telefon</label>
-              <input type="tel" id="offer-phone" name="telefon" autocomplete="tel" inputmode="tel" maxlength="24" aria-describedby="offer-phone-error" />
-              <p class="field-error" id="offer-phone-error" hidden></p>
-            </div>
-            <p class="inquiry-hint">Napište e-mail, nebo telefon.</p>
             <div class="field">
               <label for="offer-msg">zpráva</label>
               <textarea id="offer-msg" name="zpráva" rows="5" required maxlength="4000" aria-describedby="offer-msg-error"></textarea>
@@ -234,6 +228,6 @@
     </div>
   </dialog>
 
-  <script src="/nabidka/grafika-interieru/book.js?v=5"></script>
+  <script src="/nabidka/grafika-interieru/book.js?v=6"></script>
 </body>
 </html>
