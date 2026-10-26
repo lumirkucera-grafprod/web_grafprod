@@ -363,7 +363,7 @@ body.offer-page {
 }
 
 .book-slots {
-  max-height: 188px;
+  max-height: 132px;
   overflow: auto;
   align-content: flex-start;
 }

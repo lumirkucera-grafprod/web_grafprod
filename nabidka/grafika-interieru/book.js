@@ -21,6 +21,7 @@
   var submitBtn = dialog.querySelector("[data-book-submit]");
   var nameInput = dialog.querySelector("#book-name");
   var emailInput = dialog.querySelector("#book-email");
+  var phoneInput = dialog.querySelector("#book-phone");
   var noteInput = dialog.querySelector("#book-note");
   var lastFocus = null;
   var slotsByDay = {};
@@ -54,6 +55,7 @@
     });
     nameInput.removeAttribute("aria-invalid");
     emailInput.removeAttribute("aria-invalid");
+    phoneInput.removeAttribute("aria-invalid");
   }
 
   function fieldError(key, input, message) {
@@ -89,20 +91,39 @@
     return new Date(Date.UTC(parts[0], parts[1] - 1, parts[2], 11, 0, 0));
   }
 
-  function formatTime(iso) {
+  function timeParts(iso) {
     var parts = new Intl.DateTimeFormat("cs-CZ", {
       timeZone: TZ,
       hour: "2-digit",
       minute: "2-digit",
       hourCycle: "h23",
     }).formatToParts(new Date(iso));
-    var hour = "00";
+    var hour = "0";
     var minute = "00";
     parts.forEach(function (part) {
       if (part.type === "hour") hour = part.value;
       if (part.type === "minute") minute = part.value;
     });
-    return hour.padStart(2, "0") + ":" + minute.padStart(2, "0");
+    return { hour: String(Number(hour)), minute: minute.padStart(2, "0") };
+  }
+
+  function formatTime(iso) {
+    var time = timeParts(iso);
+    return time.hour.padStart(2, "0") + ":" + time.minute;
+  }
+
+  function formatCallTime(iso) {
+    var time = timeParts(iso);
+    return time.hour + ":" + time.minute;
+  }
+
+  function formatCallDay(iso) {
+    return new Intl.DateTimeFormat("cs-CZ", {
+      timeZone: TZ,
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    }).format(new Date(iso));
   }
 
   function formatDayLong(isoOrYmd, isYmd) {
@@ -261,12 +282,33 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }
 
+  function toE164(raw) {
+    var compact = String(raw || "").trim().replace(/[\s.\-()/]/g, "");
+    if (!compact || compact === "+") return "";
+    if (compact.indexOf("00") === 0) compact = "+" + compact.slice(2);
+    if (compact.charAt(0) !== "+") {
+      if (/^420\d{9}$/.test(compact)) compact = "+" + compact;
+      else if (/^\d{9}$/.test(compact)) compact = "+420" + compact;
+    }
+    if (!/^\+[1-9]\d{7,14}$/.test(compact)) return "";
+    return compact;
+  }
+
+  function formatPhone(e164) {
+    if (/^\+420\d{9}$/.test(e164)) {
+      var national = e164.slice(4);
+      return "+420 " + national.slice(0, 3) + " " + national.slice(3, 6) + " " + national.slice(6);
+    }
+    return e164;
+  }
+
   function onSubmit(event) {
     event.preventDefault();
     clearFieldErrors();
     setAlert("");
     var name = nameInput.value.trim();
     var email = emailInput.value.trim();
+    var phone = toE164(phoneInput.value);
     var note = noteInput.value.trim();
     if (!selectedSlot) {
       setAlert("Vyberte čas hovoru.");
@@ -280,6 +322,10 @@
       fieldError("email", emailInput, "Napište e-mail.");
       return;
     }
+    if (!phone) {
+      fieldError("phone", phoneInput, "Napište telefon včetně předvolby, třeba +420 732 828 692.");
+      return;
+    }
     var payload = {
       start: selectedSlot,
       eventTypeId: EVENT_ID,
@@ -288,6 +334,11 @@
         email: email,
         timeZone: TZ,
         language: "cs",
+        phoneNumber: phone,
+      },
+      location: {
+        type: "attendeePhone",
+        phone: phone,
       },
     };
     if (note) payload.bookingFieldsResponses = { notes: note };
@@ -312,7 +363,8 @@
         submitBtn.textContent = "Potvrdit hovor";
         var booking = result.body && result.body.data;
         if (result.ok && booking && (booking.status === "accepted" || booking.status === "pending")) {
-          whenEl.textContent = formatDayLong(booking.start || selectedSlot, false) + ", " + formatTime(booking.start || selectedSlot) + ", pražský čas.";
+          var start = booking.start || selectedSlot;
+          whenEl.textContent = "Zavolám vám v " + formatCallDay(start) + " v " + formatCallTime(start) + " na číslo " + formatPhone(phone) + ".";
           setView("success");
           return;
         }

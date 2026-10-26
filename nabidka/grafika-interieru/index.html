@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css?v=home1" />
-  <link rel="stylesheet" href="/nabidka/grafika-interieru/offer.css?v=2" />
+  <link rel="stylesheet" href="/nabidka/grafika-interieru/offer.css?v=3" />
 </head>
 <body class="offer-page">
   <div class="offer-frame">
@@ -145,7 +145,7 @@
       <div class="book-body">
 
       <div data-book-view="pick">
-        <p class="book-lead">Vyberte den a čas. Hovor trvá 15 minut.</p>
+        <p class="book-lead">Vyberte čas, kdy vám zavolám. Hovor trvá zhruba 15 minut.</p>
         <p class="book-note" data-book-loading hidden>Načítám volné časy.</p>
         <p class="book-alert" data-book-alert hidden></p>
         <div class="book-days" data-book-days role="group" aria-label="Den" hidden></div>
@@ -163,6 +163,11 @@
             <p class="field-error" data-error-for="email" hidden></p>
           </div>
           <div class="field">
+            <label for="book-phone">telefon</label>
+            <input id="book-phone" name="telefon" type="tel" autocomplete="tel" inputmode="tel" required maxlength="24" value="+420" />
+            <p class="field-error" data-error-for="phone" hidden></p>
+          </div>
+          <div class="field">
             <label for="book-note">poznámka, volitelné</label>
             <textarea id="book-note" name="poznámka" rows="3" maxlength="500"></textarea>
           </div>
@@ -176,9 +181,9 @@
       </div>
 
       <div data-book-view="success" hidden>
-        <p class="book-result-title">Hovor je domluvený.</p>
+        <p class="book-result-title">Hotovo.</p>
         <p data-book-when></p>
-        <p>Pozvánka je odeslaná na váš e-mail.</p>
+        <p>Potvrzení jsme poslali na e-mail.</p>
       </div>
 
       <div data-book-view="error" hidden>
@@ -192,6 +197,6 @@
     </div>
   </dialog>
 
-  <script src="/nabidka/grafika-interieru/book.js?v=2"></script>
+  <script src="/nabidka/grafika-interieru/book.js?v=3"></script>
 </body>
 </html>
