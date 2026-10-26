@@ -334,16 +334,14 @@
       phoneNumber: phone,
     };
     if (email) attendee.email = email;
+    var responses = { attendeePhoneNumber: phone };
+    if (note) responses.notes = note;
     var payload = {
       start: selectedSlot,
       eventTypeId: EVENT_ID,
       attendee: attendee,
-      location: {
-        type: "attendeePhone",
-        phone: phone,
-      },
+      bookingFieldsResponses: responses,
     };
-    if (note) payload.bookingFieldsResponses = { notes: note };
 
     submitBtn.disabled = true;
     submitBtn.textContent = "Odesílám";
