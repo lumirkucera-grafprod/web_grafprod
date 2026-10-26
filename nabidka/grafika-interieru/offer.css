@@ -1,0 +1,263 @@
+/* Offer page. Reuses styles.css tokens; this file only lays out /nabidka/grafika-interieru/. */
+
+body.offer-page {
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color-scheme: dark;
+}
+
+.offer-frame {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+.offer-page .top-nav a.nav-cta {
+  position: static;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  z-index: auto;
+  background: transparent;
+  box-shadow: none;
+}
+
+.offer-main {
+  /* Right inset echoes the homepage chevron gutter; text starts on the logo inset. */
+  padding: clamp(40px, 4.6vw, 80px) clamp(24px, 4.5vw, 72px) 104px var(--pad-x);
+}
+
+.offer-inner {
+  width: 100%;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 36rem) minmax(280px, 1fr);
+  gap: clamp(28px, 4vw, 72px);
+  align-items: center;
+}
+
+.hero-copy h1 {
+  margin: 0 0 0.75em;
+  max-width: 14em;
+  font-size: clamp(26px, 2.35vw, 36px);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.22;
+}
+
+.lede {
+  max-width: 38em;
+  margin: 0;
+  font-size: clamp(14px, 0.85vw, 15px);
+  font-weight: 300;
+  line-height: 1.75;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+  min-height: 44px;
+  padding: 0.72em 1.2em;
+  border: 1px solid var(--accent);
+  font-size: clamp(12px, 0.75vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-solid {
+  background: var(--accent);
+  color: #000;
+}
+
+.btn-solid:hover {
+  color: #000;
+  opacity: 0.88;
+}
+
+.btn-line {
+  background: transparent;
+  color: var(--accent);
+}
+
+.btn-line:hover {
+  background: var(--accent);
+  color: #000;
+  opacity: 1;
+}
+
+.hero-shot,
+.frames figure {
+  margin: 0;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.hero-shot img,
+.frames img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: opacity 0.35s ease;
+}
+
+.hero-shot:hover img,
+.frames figure:hover img {
+  opacity: 0.92;
+}
+
+.block {
+  margin-top: clamp(64px, 8vw, 112px);
+  padding-top: clamp(28px, 3.2vw, 40px);
+  border-top: 1px solid var(--accent-dim);
+}
+
+.offer-main h2 {
+  margin: 0 0 1.4em;
+  font-size: clamp(15px, 1.05vw, 18px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
+.offer-main h3 {
+  margin: 0 0 0.45em;
+  font-size: clamp(14px, 0.8vw, 15px);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+.services,
+.steps,
+.offer-main .service p,
+.steps p,
+.addon {
+  font-size: clamp(14px, 0.8vw, 15px);
+  font-weight: 300;
+  line-height: 1.75;
+}
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(22px, 3vw, 40px);
+}
+
+.service p,
+.steps p,
+.addon {
+  margin: 0;
+}
+
+.addon {
+  max-width: 40em;
+  margin-top: 28px;
+  color: var(--accent-soft);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(22px, 2.4vw, 36px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step-no {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--accent-soft);
+}
+
+.frames {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gutter-y) var(--gutter-x);
+}
+
+.frames .span {
+  grid-column: 1 / -1;
+}
+
+.close .contact {
+  margin-top: 2.5em;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .hero-shot {
+    max-width: 640px;
+  }
+
+  .services {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .steps {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 960px) {
+  .offer-main {
+    padding: 36px 24px 88px;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero-copy h1 {
+    font-size: 26px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .offer-main .contact {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .hero-shot img,
+  .frames img {
+    transition: none;
+  }
+}
