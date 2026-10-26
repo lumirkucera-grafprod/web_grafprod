@@ -445,7 +445,6 @@
   var ERR_MSG = "Odeslání se nepovedlo. Napište na lumir@grafikaprodukce.cz.";
   var nameInput = document.getElementById("offer-name");
   var emailInput = document.getElementById("offer-email");
-  var phoneInput = document.getElementById("offer-phone");
   var msgInput = document.getElementById("offer-msg");
   var statusEl = document.getElementById("offer-status");
   var submitBtn = form.querySelector(".submit-btn");
@@ -481,19 +480,7 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
   }
 
-  function toE164(raw) {
-    var compact = String(raw || "").trim().replace(/[\s.\-()/]/g, "");
-    if (!compact || compact === "+" || compact === "+420") return "";
-    if (compact.indexOf("00") === 0) compact = "+" + compact.slice(2);
-    if (compact.charAt(0) !== "+") {
-      if (/^420\d{9}$/.test(compact)) compact = "+" + compact;
-      else if (/^\d{9}$/.test(compact)) compact = "+420" + compact;
-    }
-    if (!/^\+[1-9]\d{7,14}$/.test(compact)) return "";
-    return compact;
-  }
-
-  [nameInput, emailInput, phoneInput, msgInput].forEach(function (input) {
+  [nameInput, emailInput, msgInput].forEach(function (input) {
     input.addEventListener("input", function () {
       if (input.getAttribute("aria-invalid") === "true") {
         showError(input.id + "-error", input, "");
@@ -506,23 +493,16 @@
     if (sending) return;
     var name = nameInput.value.trim();
     var email = emailInput.value.trim();
-    var phoneRaw = phoneInput.value.trim();
-    var phone = phoneRaw ? toE164(phoneRaw) : "";
     var msg = msgInput.value.trim();
     var nameMsg = name ? "" : "Doplňte jméno.";
-    var emailMsg = email && !validEmail(email) ? "Zadejte platný e-mail." : "";
-    var phoneMsg = phoneRaw && !phone ? "Napište telefon včetně předvolby, třeba +420 732 828 692." : "";
-    var contactMsg = !emailMsg && !phoneMsg && !email && !phone ? "Napište e-mail, nebo telefon." : "";
+    var emailMsg = validEmail(email) ? "" : "Zadejte platný e-mail.";
     var msgMsg = msg ? "" : "Napište zprávu.";
     showError("offer-name-error", nameInput, nameMsg);
     showError("offer-email-error", emailInput, emailMsg);
-    showError("offer-phone-error", phoneInput, phoneMsg || contactMsg);
     showError("offer-msg-error", msgInput, msgMsg);
-    if (contactMsg) emailInput.setAttribute("aria-invalid", "true");
     var firstInvalid = null;
     if (nameMsg) firstInvalid = nameInput;
     else if (emailMsg) firstInvalid = emailInput;
-    else if (phoneMsg || contactMsg) firstInvalid = phoneInput;
     else if (msgMsg) firstInvalid = msgInput;
     if (firstInvalid) {
       setStatus("");
@@ -534,16 +514,13 @@
     var payload = {
       "jméno": name,
       "zpráva": msg,
+      email: email,
+      _replyto: email,
       _subject: SUBJECT,
       _template: "table",
       _captcha: "false",
       _honey: honey ? honey.value : "",
     };
-    if (email) {
-      payload.email = email;
-      payload._replyto = email;
-    }
-    if (phone) payload.telefon = phone;
 
     sending = true;
     var needsActivation = false;
