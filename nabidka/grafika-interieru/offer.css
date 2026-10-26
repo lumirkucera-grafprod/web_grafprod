@@ -204,6 +204,35 @@ body.offer-page {
   margin-top: 2.5em;
 }
 
+#zprava {
+  scroll-margin-top: 28px;
+}
+
+.offer-page .inquiry-form {
+  margin-top: 0.2em;
+}
+
+.inquiry-hint,
+.inquiry-phone {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--accent-soft);
+}
+
+.inquiry-phone {
+  margin-top: 1.4em;
+}
+
+.inquiry-phone a {
+  color: var(--accent);
+}
+
+.inquiry-phone a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
@@ -520,7 +549,8 @@ body.offer-page {
   }
 
   .book-form .btn,
-  .book [data-book-view="error"] .btn {
+  .book [data-book-view="error"] .btn,
+  .offer-page .inquiry-form .submit-btn {
     width: 100%;
   }
 }

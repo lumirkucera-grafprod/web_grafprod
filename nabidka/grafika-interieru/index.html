@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css?v=home1" />
-  <link rel="stylesheet" href="/nabidka/grafika-interieru/offer.css?v=3" />
+  <link rel="stylesheet" href="/nabidka/grafika-interieru/offer.css?v=4" />
 </head>
 <body class="offer-page">
   <div class="offer-frame">
@@ -42,7 +42,7 @@
             <p class="lede">Jsem Lumír Kučera ze studia GRAFIKAPRODUKCE. Navrhujeme a vyrábíme grafiku do komerčních i soukromých interiérů. S architektem, interiérovým studiem nebo firmou, která prostor zařizuje, ji vezmeme od zadání přes výrobu až po montáž.</p>
             <div class="actions">
               <a class="btn btn-solid" href="https://cal.com/grafikaprodukce/kratky-hovor" data-book-open>Domluvit krátký hovor</a>
-              <a class="btn btn-line" href="tel:+420732828692">Zavolat <span>732&nbsp;828&nbsp;692</span></a>
+              <a class="btn btn-line" href="#zprava">Napsat zprávu</a>
             </div>
           </div>
           <figure class="hero-shot">
@@ -124,13 +124,48 @@
           <p class="lede">Když budete řešit grafiku do interiéru a chcete ji mít od návrhu po montáž u jednoho studia, ozvěte se mi. Krátce si řekneme, o jaký prostor jde.</p>
           <div class="actions">
             <a class="btn btn-solid" href="https://cal.com/grafikaprodukce/kratky-hovor" data-book-open>Domluvit krátký hovor</a>
-            <a class="btn btn-line" href="tel:+420732828692">Zavolat <span>732&nbsp;828&nbsp;692</span></a>
+            <a class="btn btn-line" href="#zprava">Napsat zprávu</a>
           </div>
           <div class="contact">
             <p>grafika | Lumír Kučera | <a href="mailto:lumir@grafikaprodukce.cz">lumir@grafikaprodukce.cz</a> | <a href="tel:+420732828692">732&nbsp;828&nbsp;692</a></p>
             <p>produkce | Lucie Kučerová | <a href="mailto:lucie@grafikaprodukce.cz">lucie@grafikaprodukce.cz</a> | <a href="tel:+420731450001">731&nbsp;450&nbsp;001</a></p>
             <p class="city">Praha 6</p>
           </div>
+        </section>
+
+        <section class="block" id="zprava" aria-labelledby="zprava-title">
+          <h2 id="zprava-title">Napište mi</h2>
+          <p class="lede">Napište, o jaký interiér jde. Ozvu se vám.</p>
+          <form class="inquiry-form" id="offer-inquiry" action="https://formsubmit.co/lumir@grafikaprodukce.cz" method="post" novalidate>
+            <input type="hidden" name="_subject" value="Poptávka z nabídkové stránky – grafika interiéru" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="text" name="_honey" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none" />
+            <div class="field">
+              <label for="offer-name">jméno</label>
+              <input type="text" id="offer-name" name="jméno" autocomplete="name" required maxlength="120" aria-describedby="offer-name-error" />
+              <p class="field-error" id="offer-name-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="offer-email">e-mail</label>
+              <input type="email" id="offer-email" name="email" autocomplete="email" inputmode="email" spellcheck="false" maxlength="200" aria-describedby="offer-email-error" />
+              <p class="field-error" id="offer-email-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="offer-phone">telefon</label>
+              <input type="tel" id="offer-phone" name="telefon" autocomplete="tel" inputmode="tel" maxlength="24" aria-describedby="offer-phone-error" />
+              <p class="field-error" id="offer-phone-error" hidden></p>
+            </div>
+            <p class="inquiry-hint">Napište e-mail, nebo telefon.</p>
+            <div class="field">
+              <label for="offer-msg">zpráva</label>
+              <textarea id="offer-msg" name="zpráva" rows="5" required maxlength="4000" aria-describedby="offer-msg-error"></textarea>
+              <p class="field-error" id="offer-msg-error" hidden></p>
+            </div>
+            <button type="submit" class="submit-btn">odeslat</button>
+            <p class="form-note form-status" id="offer-status" role="status" aria-live="polite" hidden></p>
+          </form>
+          <p class="inquiry-phone"><a href="tel:+420732828692">732&nbsp;828&nbsp;692</a></p>
         </section>
       </div>
     </main>
@@ -158,8 +193,8 @@
             <p class="field-error" data-error-for="name" hidden></p>
           </div>
           <div class="field">
-            <label for="book-email">e-mail</label>
-            <input id="book-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="200" />
+            <label for="book-email">e-mail (nepovinný)</label>
+            <input id="book-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="200" />
             <p class="field-error" data-error-for="email" hidden></p>
           </div>
           <div class="field">
@@ -176,27 +211,29 @@
         <div class="book-fallback" data-book-fallback hidden>
           <p>V těchto dnech teď není volný čas.</p>
           <p><a href="https://cal.com/grafikaprodukce/kratky-hovor">Vybrat čas na Cal.com</a></p>
-          <p><a href="tel:+420732828692">Zavolat <span>732&nbsp;828&nbsp;692</span></a></p>
+          <p><a href="#zprava" data-book-message>Napsat zprávu</a></p>
+          <p><a href="tel:+420732828692">732&nbsp;828&nbsp;692</a></p>
         </div>
       </div>
 
       <div data-book-view="success" hidden>
         <p class="book-result-title">Hotovo.</p>
         <p data-book-when></p>
-        <p>Potvrzení jsme poslali na e-mail.</p>
+        <p data-book-mail hidden>Potvrzení jsme poslali na e-mail.</p>
       </div>
 
       <div data-book-view="error" hidden>
         <p class="book-result-title">Hovor se nepodařilo domluvit.</p>
-        <p data-book-error-text>Zkuste to za chvíli znovu, vyberte čas na Cal.com, nebo zavolejte.</p>
+        <p data-book-error-text>Zkuste to za chvíli znovu, vyberte čas na Cal.com, nebo napište zprávu.</p>
         <p><a href="https://cal.com/grafikaprodukce/kratky-hovor">Vybrat čas na Cal.com</a></p>
-        <p><a href="tel:+420732828692">Zavolat <span>732&nbsp;828&nbsp;692</span></a></p>
+        <p><a href="#zprava" data-book-message>Napsat zprávu</a></p>
+        <p><a href="tel:+420732828692">732&nbsp;828&nbsp;692</a></p>
         <button type="button" class="btn btn-line" data-book-retry>Zkusit znovu</button>
       </div>
       </div>
     </div>
   </dialog>
 
-  <script src="/nabidka/grafika-interieru/book.js?v=3"></script>
+  <script src="/nabidka/grafika-interieru/book.js?v=4"></script>
 </body>
 </html>

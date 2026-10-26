@@ -18,6 +18,7 @@
   var fallbackEl = dialog.querySelector("[data-book-fallback]");
   var chosenEl = dialog.querySelector("[data-book-chosen]");
   var whenEl = dialog.querySelector("[data-book-when]");
+  var mailEl = dialog.querySelector("[data-book-mail]");
   var submitBtn = dialog.querySelector("[data-book-submit]");
   var nameInput = dialog.querySelector("#book-name");
   var emailInput = dialog.querySelector("#book-email");
@@ -318,24 +319,25 @@
       fieldError("name", nameInput, "Napište jméno.");
       return;
     }
-    if (!validEmail(email)) {
-      fieldError("email", emailInput, "Napište e-mail.");
+    if (email && !validEmail(email)) {
+      fieldError("email", emailInput, "Napište platný e-mail.");
       return;
     }
     if (!phone) {
       fieldError("phone", phoneInput, "Napište telefon včetně předvolby, třeba +420 732 828 692.");
       return;
     }
+    var attendee = {
+      name: name,
+      timeZone: TZ,
+      language: "cs",
+      phoneNumber: phone,
+    };
+    if (email) attendee.email = email;
     var payload = {
       start: selectedSlot,
       eventTypeId: EVENT_ID,
-      attendee: {
-        name: name,
-        email: email,
-        timeZone: TZ,
-        language: "cs",
-        phoneNumber: phone,
-      },
+      attendee: attendee,
       location: {
         type: "attendeePhone",
         phone: phone,
@@ -365,6 +367,7 @@
         if (result.ok && booking && (booking.status === "accepted" || booking.status === "pending")) {
           var start = booking.start || selectedSlot;
           whenEl.textContent = "Zavolám vám v " + formatCallDay(start) + " v " + formatCallTime(start) + " na číslo " + formatPhone(phone) + ".";
+          show(mailEl, !!email);
           setView("success");
           return;
         }
@@ -397,6 +400,18 @@
     button.addEventListener("click", closeDialog);
   });
 
+  dialog.querySelectorAll("[data-book-message]").forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+      closeDialog();
+      var target = document.getElementById("zprava");
+      if (target && typeof target.scrollIntoView === "function") {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      if (history.replaceState) history.replaceState(null, "", "#zprava");
+    });
+  });
+
   dialog.addEventListener("click", function (event) {
     if (event.target === dialog) closeDialog();
   });
@@ -420,4 +435,157 @@
   if (location.hash === "#rezervace") {
     openDialog(openers[0] || null);
   }
+})();
+
+(function () {
+  var form = document.getElementById("offer-inquiry");
+  if (!form) return;
+
+  var ENDPOINT = "https://formsubmit.co/ajax/lumir@grafikaprodukce.cz";
+  var SUBJECT = "Poptávka z nabídkové stránky – grafika interiéru";
+  var OK_MSG = "Děkujeme, zpráva byla odeslána. Ozvu se vám.";
+  var ERR_MSG = "Odeslání se nepovedlo. Napište na lumir@grafikaprodukce.cz.";
+  var nameInput = document.getElementById("offer-name");
+  var emailInput = document.getElementById("offer-email");
+  var phoneInput = document.getElementById("offer-phone");
+  var msgInput = document.getElementById("offer-msg");
+  var statusEl = document.getElementById("offer-status");
+  var submitBtn = form.querySelector(".submit-btn");
+  var btnLabel = submitBtn ? submitBtn.textContent : "odeslat";
+  var sending = false;
+
+  function showError(id, input, message) {
+    var el = document.getElementById(id);
+    if (message) {
+      input.setAttribute("aria-invalid", "true");
+      if (el) {
+        el.hidden = false;
+        el.textContent = message;
+      }
+    } else {
+      input.removeAttribute("aria-invalid");
+      if (el) {
+        el.hidden = true;
+        el.textContent = "";
+      }
+    }
+  }
+
+  function setStatus(message, tone) {
+    if (!statusEl) return;
+    statusEl.hidden = !message;
+    statusEl.textContent = message || "";
+    if (tone) statusEl.dataset.tone = tone;
+    else delete statusEl.dataset.tone;
+  }
+
+  function validEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+  }
+
+  function toE164(raw) {
+    var compact = String(raw || "").trim().replace(/[\s.\-()/]/g, "");
+    if (!compact || compact === "+" || compact === "+420") return "";
+    if (compact.indexOf("00") === 0) compact = "+" + compact.slice(2);
+    if (compact.charAt(0) !== "+") {
+      if (/^420\d{9}$/.test(compact)) compact = "+" + compact;
+      else if (/^\d{9}$/.test(compact)) compact = "+420" + compact;
+    }
+    if (!/^\+[1-9]\d{7,14}$/.test(compact)) return "";
+    return compact;
+  }
+
+  [nameInput, emailInput, phoneInput, msgInput].forEach(function (input) {
+    input.addEventListener("input", function () {
+      if (input.getAttribute("aria-invalid") === "true") {
+        showError(input.id + "-error", input, "");
+      }
+    });
+  });
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    if (sending) return;
+    var name = nameInput.value.trim();
+    var email = emailInput.value.trim();
+    var phoneRaw = phoneInput.value.trim();
+    var phone = phoneRaw ? toE164(phoneRaw) : "";
+    var msg = msgInput.value.trim();
+    var nameMsg = name ? "" : "Doplňte jméno.";
+    var emailMsg = email && !validEmail(email) ? "Zadejte platný e-mail." : "";
+    var phoneMsg = phoneRaw && !phone ? "Napište telefon včetně předvolby, třeba +420 732 828 692." : "";
+    var contactMsg = !emailMsg && !phoneMsg && !email && !phone ? "Napište e-mail, nebo telefon." : "";
+    var msgMsg = msg ? "" : "Napište zprávu.";
+    showError("offer-name-error", nameInput, nameMsg);
+    showError("offer-email-error", emailInput, emailMsg);
+    showError("offer-phone-error", phoneInput, phoneMsg || contactMsg);
+    showError("offer-msg-error", msgInput, msgMsg);
+    if (contactMsg) emailInput.setAttribute("aria-invalid", "true");
+    var firstInvalid = null;
+    if (nameMsg) firstInvalid = nameInput;
+    else if (emailMsg) firstInvalid = emailInput;
+    else if (phoneMsg || contactMsg) firstInvalid = phoneInput;
+    else if (msgMsg) firstInvalid = msgInput;
+    if (firstInvalid) {
+      setStatus("");
+      firstInvalid.focus();
+      return;
+    }
+
+    var honey = form.querySelector('[name="_honey"]');
+    var payload = {
+      "jméno": name,
+      "zpráva": msg,
+      _subject: SUBJECT,
+      _template: "table",
+      _captcha: "false",
+      _honey: honey ? honey.value : "",
+    };
+    if (email) {
+      payload.email = email;
+      payload._replyto = email;
+    }
+    if (phone) payload.telefon = phone;
+
+    sending = true;
+    var needsActivation = false;
+    setStatus("");
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Odesílám…";
+    }
+    fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          return { ok: res.ok, data: data };
+        });
+      })
+      .then(function (result) {
+        var message = (result.data && result.data.message) || "";
+        if (!result.ok || String(result.data && result.data.success) !== "true") {
+          if (/activat/i.test(message)) {
+            needsActivation = true;
+            setStatus("Formulář je potřeba znovu aktivovat. Zpráva se neodeslala.", "error");
+            return;
+          }
+          throw new Error(message || "send");
+        }
+        form.reset();
+        setStatus(OK_MSG, "ok");
+      })
+      .catch(function () {
+        setStatus(ERR_MSG, "error");
+      })
+      .then(function () {
+        sending = false;
+        if (submitBtn && !needsActivation) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = btnLabel;
+        }
+      });
+  });
 })();
