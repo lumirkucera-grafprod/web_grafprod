@@ -109,12 +109,22 @@ body.offer-page {
   background: #0a0a0a;
 }
 
+.hero-shot {
+  aspect-ratio: 3 / 2;
+}
+
 .hero-shot img,
 .frames img {
   display: block;
   width: 100%;
   height: auto;
   transition: opacity 0.35s ease;
+}
+
+.hero-shot img {
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
 }
 
 .hero-shot:hover img,
@@ -192,12 +202,24 @@ body.offer-page {
 
 .frames {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(12, 1fr);
   gap: var(--gutter-y) var(--gutter-x);
 }
 
+.frames figure {
+  grid-column: span 6;
+}
+
 .frames .span {
-  grid-column: 1 / -1;
+  grid-column: span 12;
+}
+
+.frames .end-wide {
+  grid-column: span 7;
+}
+
+.frames .end-portrait {
+  grid-column: span 5;
 }
 
 .close .contact {
@@ -275,6 +297,13 @@ body.offer-page {
   .steps,
   .frames {
     grid-template-columns: 1fr;
+  }
+
+  .frames figure,
+  .frames .span,
+  .frames .end-wide,
+  .frames .end-portrait {
+    grid-column: 1 / -1;
   }
 
   .offer-main .contact {
