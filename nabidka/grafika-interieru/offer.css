@@ -41,6 +41,10 @@ body.offer-page {
 }
 
 .hero-copy h1 {
+  position: static;
+  left: auto;
+  right: auto;
+  top: auto;
   margin: 0 0 0.75em;
   max-width: 14em;
   font-size: clamp(26px, 2.35vw, 36px);
