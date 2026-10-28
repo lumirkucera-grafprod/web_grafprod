@@ -272,7 +272,8 @@ body.offer-page {
     width: 100%;
   }
 
-  .steps {
+  .steps,
+  .frames {
     grid-template-columns: 1fr;
   }
 
