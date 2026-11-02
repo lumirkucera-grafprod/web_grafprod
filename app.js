@@ -62,7 +62,9 @@
   });
 
   function assetUrl(path) {
-    return new URL(path, document.baseURI).href;
+    const url = new URL(path, document.baseURI);
+    if (String(path).indexOf("assets/gallery/") !== -1) url.searchParams.set("v", "trim1");
+    return url.href;
   }
 
   function scrollBehavior() {
