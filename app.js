@@ -63,7 +63,7 @@
 
   function assetUrl(path) {
     const url = new URL(path, document.baseURI);
-    if (String(path).indexOf("assets/gallery/") !== -1) url.searchParams.set("v", "trim1");
+    if (String(path).indexOf("assets/gallery/") !== -1) url.searchParams.set("v", "trim2");
     return url.href;
   }
 
