@@ -14,7 +14,7 @@
   Object.keys(COUNTS).forEach((cat) => {
     images[cat] = [];
     for (let i = 0; i < COUNTS[cat]; i++) {
-      images[cat].push(`assets/gallery/${cat}/${String(i).padStart(2, "0")}.jpg?v=trim2`);
+      images[cat].push(`assets/gallery/${cat}/${String(i).padStart(2, "0")}.jpg?v=trim3`);
     }
   });
 
@@ -34,7 +34,7 @@
 
       galleryEl.innerHTML = layout.items
         .map((item, i) => {
-          const src = `assets/gallery/${cat}/${item.file}?v=trim2`;
+          const src = `assets/gallery/${cat}/${item.file}?v=trim3`;
           return `<figure style="--x:${item.x};--y:${item.y};--w:${item.w};--h:${item.h}" data-i="${i}"><img src="${src}" alt="Projekt ${
             i + 1
           }" width="${item.px_w || Math.round(item.w)}" height="${

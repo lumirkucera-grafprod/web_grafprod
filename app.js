@@ -44,11 +44,11 @@
     { y: 0, text: "Navrhneme a realizujeme kompletní branding" },
     { y: 1392.73, text: "Vytvoříme pro vás značku, logo" },
     {
-      y: 1918.84,
+      y: 2610.52,
       text: "Navrhneme design a vyrobíme prostředky pro vaši\nin-store komunikaci",
     },
     {
-      y: 3758.59,
+      y: 4450.27,
       text: "Vytvoříme pro vás vizuální identitu a aplikujeme do reálného i digitálního světa. Navrhneme obaly, katalogy, prezentace, bannery nebo grafiku na auta tak, aby každé setkání s vaší firmou zanechalo perfektní dojem.",
     },
   ];
@@ -63,7 +63,7 @@
 
   function assetUrl(path) {
     const url = new URL(path, document.baseURI);
-    if (String(path).indexOf("assets/gallery/") !== -1) url.searchParams.set("v", "trim2");
+    if (String(path).indexOf("assets/gallery/") !== -1) url.searchParams.set("v", "trim3");
     return url.href;
   }
 
